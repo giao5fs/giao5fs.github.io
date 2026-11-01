@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How to Handle Concurrent Requests Safely · Giao Nguyen</title>
+<meta name="description" content="Why two requests at the same time can corrupt your data, and how to prevent it at each layer: in memory, in the database and across multiple servers.">
+<meta name="theme-color" content="#030712">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to Handle Concurrent Requests Safely">
+<meta property="og:description" content="Why two requests at the same time can corrupt your data, and how to prevent it at each layer: in memory, in the database and across multiple servers.">
+<link rel="alternate" type="application/rss+xml" title="Giao Nguyen" href="../feed.xml">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23030712'/%3E%3Crect x='3' y='3' width='26' height='26' fill='none' stroke='%236366f1' stroke-width='2'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='14' font-weight='700' fill='%236366f1' text-anchor='middle'%3ENX%3C/text%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="../index.html"><span class="avatar" aria-hidden="true">NG</span><span>Giao Nguyen</span></a>
+    <nav aria-label="Main">
+      <a href="../blog.html" class="active" aria-current="page">Blog</a>
+      <a href="../about.html">About</a>
+    </nav>
+    <button class="theme" type="button" id="theme" aria-label="Toggle color theme">
+      <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+<main>
+  <div class="wrap page">
+    <p class="crumb"><a href="../blog.html">&larr; All posts</a></p>
+    <article>
+      <header class="post-head">
+        <div class="chips"><a class="chip" href="../blog.html#dotnet">dotnet</a><a class="chip" href="../blog.html#concurrency">concurrency</a><a class="chip" href="../blog.html#ef-core">ef-core</a><a class="chip" href="../blog.html#reliability">reliability</a></div>
+        <h1>How to Handle Concurrent Requests Safely</h1>
+        <div class="post-meta">
+          <time datetime="2026-11-01">01 Nov 2026</time>
+          <span>6 min read</span>
+          
+          <span>by Giao Nguyen</span>
+        </div>
+        <p class="post-sum">Why two requests at the same time can corrupt your data, and how to prevent it at each layer: in memory, in the database and across multiple servers.</p>
+        <nav class="toc" aria-label="On this page"><b>On this page</b><ol><li><a href="#the-core-problem-check-then-act">The core problem: check-then-act</a></li><li><a href="#layer-1-share-less">Layer 1: Share less</a></li><li><a href="#layer-2-protect-shared-state-in-memory">Layer 2: Protect shared state in memory</a></li><li><a href="#layer-3-let-the-database-decide">Layer 3: Let the database decide</a></li><li><a href="#layer-4-multiple-servers-and-repeated-requests">Layer 4: Multiple servers and repeated requests</a></li><li><a href="#choosing-the-right-tool">Choosing the right tool</a></li><li><a href="#how-to-test-it">How to test it</a></li><li><a href="#summary">Summary</a></li></ol></nav>
+      </header>
+      <div class="post-body">
+<p>One user clicks &quot;Buy&quot; once. Your code works. Two users click &quot;Buy&quot; for the last item in stock at the same instant, and both succeed. The warehouse now owes one customer a product that does not exist.</p>
+<p>Bugs like this pass every unit test and appear only under real traffic. A web server handles many requests at the same time, so any code that reads a value, makes a decision and then writes a new value is at risk. This post shows how to make that code safe, starting with the cheapest fix and moving outward.</p>
+<h2 id="the-core-problem-check-then-act">The core problem: check-then-act<a class="anchor" href="#the-core-problem-check-then-act" aria-label="Link to this section">#</a></h2>
+<p>Almost every concurrency bug has the same shape. The code <strong>checks</strong> a condition and then <strong>acts</strong> on it, and another request changes the world between the two steps.</p>
+<div class="code"><div class="code-bar"><span>csharp</span><button type="button" class="copy" data-copy>Copy</button></div><pre><code class="language-csharp">// Unsafe: two requests can both pass the check
+var product = await db.Products.FindAsync(id);
+if (product.Stock &gt;= quantity)
+{
+    product.Stock -= quantity;      // both requests subtract from the same old value
+    await db.SaveChangesAsync();
+}</code></pre></div>
+<p>Request A and request B both read <code>Stock = 1</code>. Both see enough stock. Both save. Depending on timing, one update is lost, or the stock goes negative. This is called a <strong>race condition</strong>, and it cannot be fixed by &quot;being careful&quot;. It needs a mechanism that makes the check and the act happen as one unit.</p>
+<h2 id="layer-1-share-less">Layer 1: Share less<a class="anchor" href="#layer-1-share-less" aria-label="Link to this section">#</a></h2>
+<p>The safest concurrent code is code that shares nothing.</p>
+<ul>
+<li>Keep services <strong>stateless</strong>. Keep request data in method parameters and local variables, not in fields.</li>
+<li>Prefer <strong>immutable</strong> objects (<code>record</code> types, <code>readonly</code> fields). Data that cannot change cannot be corrupted.</li>
+<li>Remember that <code>DbContext</code> is <strong>not thread-safe</strong>. Use one per request (the default <code>Scoped</code> lifetime) and never share it between parallel tasks.</li>
+<li>Be careful with <code>static</code> fields and singletons. Anything mutable in them is shared by every request.</li>
+</ul>
+<p>Many &quot;concurrency problems&quot; disappear after this step, because the shared state was never needed.</p>
+<h2 id="layer-2-protect-shared-state-in-memory">Layer 2: Protect shared state in memory<a class="anchor" href="#layer-2-protect-shared-state-in-memory" aria-label="Link to this section">#</a></h2>
+<p>When shared mutable state is unavoidable, protect it.</p>
+<p><strong>Use <code>lock</code> for short, synchronous sections:</strong></p>
+<div class="code"><div class="code-bar"><span>csharp</span><button type="button" class="copy" data-copy>Copy</button></div><pre><code class="language-csharp">private readonly object _gate = new();
+private int _count;
+
+public void Increment()
+{
+    lock (_gate) { _count++; }
+}
+// For a single counter, Interlocked.Increment(ref _count) is cheaper still.</code></pre></div>
+<p><strong>Do not <code>await</code> inside a <code>lock</code>.</strong> It does not compile, and for a good reason. Use <code>SemaphoreSlim</code> for async code:</p>
+<div class="code"><div class="code-bar"><span>csharp</span><button type="button" class="copy" data-copy>Copy</button></div><pre><code class="language-csharp">private readonly SemaphoreSlim _gate = new(1, 1);
+
+public async Task RefreshAsync(CancellationToken ct)
+{
+    await _gate.WaitAsync(ct);
+    try
+    {
+        await ReloadSettingsAsync(ct);
+    }
+    finally
+    {
+        _gate.Release();   // always release, even if the work throws
+    }
+}</code></pre></div>
+<p><strong>Know the limits of <code>ConcurrentDictionary</code>.</strong> Its methods are thread-safe, but the factory passed to <code>GetOrAdd</code> can run more than once when two threads race. If the factory is expensive or has side effects, wrap the value in <code>Lazy&lt;T&gt;</code>:</p>
+<div class="code"><div class="code-bar"><span>csharp</span><button type="button" class="copy" data-copy>Copy</button></div><pre><code class="language-csharp">var lazy = _cache.GetOrAdd(key, k =&gt; new Lazy&lt;Task&lt;Data&gt;&gt;(() =&gt; LoadAsync(k)));
+return await lazy.Value;   // only one thread runs LoadAsync for this key</code></pre></div>
+<p>(If <code>LoadAsync</code> can fail, remove the failed entry so the error is not cached.)</p>
+<h2 id="layer-3-let-the-database-decide">Layer 3: Let the database decide<a class="anchor" href="#layer-3-let-the-database-decide" aria-label="Link to this section">#</a></h2>
+<p>In-memory locks protect one process. Your data lives in a database that every request, and every server, shares. This is where most real protection belongs, and there are three good tools.</p>
+<h3 id="option-a-one-atomic-statement">Option A: One atomic statement<a class="anchor" href="#option-a-one-atomic-statement" aria-label="Link to this section">#</a></h3>
+<p>Often the best fix is to remove the separate read. Let the database check and update in one statement:</p>
+<div class="code"><div class="code-bar"><span>csharp</span><button type="button" class="copy" data-copy>Copy</button></div><pre><code class="language-csharp">var updated = await db.Products
+    .Where(p =&gt; p.Id == id &amp;&amp; p.Stock &gt;= quantity)
+    .ExecuteUpdateAsync(
+        s =&gt; s.SetProperty(p =&gt; p.Stock, p =&gt; p.Stock - quantity), ct);
+
+if (updated == 0)
+    return Results.Conflict(&quot;Not enough stock.&quot;);</code></pre></div>
+<p>This produces a single <code>UPDATE ... WHERE Stock &gt;= @quantity</code>. The database makes it atomic, so two requests cannot both take the last item. No lock is held between a read and a write, so it also scales well.</p>
+<h3 id="option-b-optimistic-concurrency">Option B: Optimistic concurrency<a class="anchor" href="#option-b-optimistic-concurrency" aria-label="Link to this section">#</a></h3>
+<p>When you must load an entity, edit it and save it, add a <strong>concurrency token</strong>. EF Core then refuses to save if someone else changed the row after you read it.</p>
+<div class="code"><div class="code-bar"><span>csharp</span><button type="button" class="copy" data-copy>Copy</button></div><pre><code class="language-csharp">public class Product
+{
+    public int Id { get; set; }
+    public int Stock { get; set; }
+
+    [Timestamp]
+    public byte[] RowVersion { get; set; } = [];
+}</code></pre></div>
+<div class="code"><div class="code-bar"><span>csharp</span><button type="button" class="copy" data-copy>Copy</button></div><pre><code class="language-csharp">try
+{
+    product.Stock -= quantity;
+    await db.SaveChangesAsync(ct);
+}
+catch (DbUpdateConcurrencyException)
+{
+    // Someone else changed this row first: reload and retry, or tell the caller
+    return Results.Conflict(&quot;The item was changed by someone else. Please try again.&quot;);
+}</code></pre></div>
+<p>&quot;Optimistic&quot; means you assume conflicts are rare, hold no locks, and handle the unlucky case when it happens. It is the right default for most business data.</p>
+<h3 id="option-c-pessimistic-locking-and-transactions">Option C: Pessimistic locking and transactions<a class="anchor" href="#option-c-pessimistic-locking-and-transactions" aria-label="Link to this section">#</a></h3>
+<p>If conflicts are frequent and a retry is expensive, lock the row while you work, for example with <code>SELECT ... WITH (UPDLOCK)</code> in SQL Server or <code>FOR UPDATE</code> in PostgreSQL, inside a transaction. This is simple to reason about, but it makes requests wait for each other, so keep the transaction short and never call another service inside it.</p>
+<p>Also use <strong>unique constraints and foreign keys</strong> as a last line of defense. A unique index on <code>(UserId, CouponCode)</code> prevents a double redemption no matter how many requests arrive, and no application bug can bypass it.</p>
+<h2 id="layer-4-multiple-servers-and-repeated-requests">Layer 4: Multiple servers and repeated requests<a class="anchor" href="#layer-4-multiple-servers-and-repeated-requests" aria-label="Link to this section">#</a></h2>
+<p>If your application runs on more than one instance, a <code>lock</code> or a <code>SemaphoreSlim</code> protects only one of them. Two servers can still collide, which is another reason the database layer is the real protection.</p>
+<p>Another source of &quot;concurrent&quot; requests is <strong>retries</strong>. A client times out and sends the same request again, while the first one is still running. The fix is <strong>idempotency</strong>: a request carries a unique key, and processing the same key twice has the same effect as processing it once.</p>
+<div class="code"><div class="code-bar"><span>csharp</span><button type="button" class="copy" data-copy>Copy</button></div><pre><code class="language-csharp">// Idempotency-Key header; the table has a UNIQUE index on Key
+try
+{
+    db.ProcessedRequests.Add(new ProcessedRequest { Key = key });
+    await db.SaveChangesAsync(ct);
+}
+catch (DbUpdateException)
+{
+    return Results.Ok(await LoadPreviousResultAsync(key, ct));   // already handled
+}
+
+// ...perform the operation...</code></pre></div>
+<p>When you need a lock across servers (for example a scheduled job that must run on only one instance), use a distributed lock such as a database lock or a Redis-based lock. Treat these carefully: they can expire while work is still running, so the work itself should still be safe to repeat.</p>
+<h2 id="choosing-the-right-tool">Choosing the right tool<a class="anchor" href="#choosing-the-right-tool" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th>Situation</th><th>Reach for</th></tr></thead><tbody><tr><td>Mutable state that nobody needs to share</td><td>Remove the sharing</td></tr><tr><td>Short in-memory critical section</td><td><code>lock</code>, <code>Interlocked</code></td></tr><tr><td>Async in-memory critical section</td><td><code>SemaphoreSlim</code></td></tr><tr><td>Counter or stock update</td><td>Atomic <code>UPDATE</code> with <code>ExecuteUpdateAsync</code></td></tr><tr><td>Edit-and-save of a record, conflicts rare</td><td>Optimistic concurrency token</td></tr><tr><td>Frequent conflicts, short work</td><td>Row lock in a transaction</td></tr><tr><td>Duplicates must be impossible</td><td>Unique constraint</td></tr><tr><td>Clients retry requests</td><td>Idempotency key</td></tr></tbody></table></div>
+<h2 id="how-to-test-it">How to test it<a class="anchor" href="#how-to-test-it" aria-label="Link to this section">#</a></h2>
+<p>Concurrency bugs do not show up in a single-request test. Write a test that fires many requests at once and asserts the outcome:</p>
+<div class="code"><div class="code-bar"><span>csharp</span><button type="button" class="copy" data-copy>Copy</button></div><pre><code class="language-csharp">var tasks = Enumerable.Range(0, 50)
+    .Select(_ =&gt; client.PostAsync(&quot;/orders&quot;, content));
+var responses = await Task.WhenAll(tasks);
+
+Assert.Equal(1, responses.Count(r =&gt; r.IsSuccessStatusCode));   // only one wins the last item</code></pre></div>
+<p>Run it against a real database, not an in-memory fake, because the guarantees you are testing come from the database engine.</p>
+<h2 id="summary">Summary<a class="anchor" href="#summary" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>A race condition happens when code <strong>checks and then acts</strong>, and the world changes in between.</li>
+<li>Share as little mutable state as you can.</li>
+<li>Use <code>lock</code> or <code>SemaphoreSlim</code> only for in-memory state, and know that they stop at the process boundary.</li>
+<li>Let the database enforce the rules: atomic updates, concurrency tokens and unique constraints.</li>
+<li>Make operations idempotent, because retries create concurrency you did not plan for.</li>
+<li>Test with many simultaneous requests against a real database.</li>
+</ul>
+      </div>
+    </article>
+    <nav class="pager" aria-label="More posts">
+      <a class="prev" href="../blog/how-to-recover-from-downstream-service-failure.html"><small>&larr; Older</small>How to Recover from Downstream Service Failure</a>
+      <a class="next" href="../blog/how-to-find-the-cause-of-a-production-performance-issue.html"><small>Newer &rarr;</small>How to Find the Cause of a Production Performance Issue</a>
+    </nav>
+  </div>
+</main>
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Giao Nguyen</span>
+    <span><a href="../about.html#contact">giao5fs@gmail.com</a> &middot; <a href="../feed.xml">RSS</a></span>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+<script src="../assets/site.js" defer></script>
+</body>
+</html>

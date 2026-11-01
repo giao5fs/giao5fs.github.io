@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Giao Nguyen</title>
+    <link>index.html</link>
+    <description>Giao Nguyen is a .NET software engineer with 10+ years of experience building web, cloud and machine-integrated systems.</description>
+    <language>en</language>
+    <item>
+      <title>7 Levels of .NET Mastery</title>
+      <link>blog/7-levels-of-dotnet-mastery.html</link>
+      <guid isPermaLink="false">blog/7-levels-of-dotnet-mastery.html</guid>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+      <description>A map of seven skill levels for .NET developers, from C# fundamentals to running reliable production systems, with what to learn at each step and how to tell you are ready for the next.</description>
+      <category>dotnet</category>
+      <category>csharp</category>
+      <category>career</category>
+      <category>learning</category>
+    </item>
+    <item>
+      <title>Habits that keep C# code readable</title>
+      <link>blog/habits-that-keep-csharp-readable.html</link>
+      <guid isPermaLink="false">blog/habits-that-keep-csharp-readable.html</guid>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Five small habits that make C# code easier to read, review and change six months later.</description>
+      <category>csharp</category>
+      <category>craft</category>
+      <category>sample</category>
+    </item>
+    <item>
+      <title>How to Diagnose a Memory Leak in .NET</title>
+      <link>blog/how-to-diagnose-a-memory-leak.html</link>
+      <guid isPermaLink="false">blog/how-to-diagnose-a-memory-leak.html</guid>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+      <description>A step-by-step method to confirm a memory leak, capture evidence with dotnet-counters and dotnet-gcdump, and trace the objects back to the root that keeps them alive.</description>
+      <category>dotnet</category>
+      <category>debugging</category>
+      <category>memory</category>
+      <category>performance</category>
+    </item>
+    <item>
+      <title>How to Find the Cause of a Production Performance Issue</title>
+      <link>blog/how-to-find-the-cause-of-a-production-performance-issue.html</link>
+      <guid isPermaLink="false">blog/how-to-find-the-cause-of-a-production-performance-issue.html</guid>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+      <description>A repeatable method for turning &quot;the site is slow&quot; into a specific cause, by narrowing down the layer first and using traces, counters and database tools second.</description>
+      <category>dotnet</category>
+      <category>performance</category>
+      <category>debugging</category>
+      <category>observability</category>
+    </item>
+    <item>
+      <title>How to Handle Concurrent Requests Safely</title>
+      <link>blog/how-to-handle-concurrent-requests-safely.html</link>
+      <guid isPermaLink="false">blog/how-to-handle-concurrent-requests-safely.html</guid>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Why two requests at the same time can corrupt your data, and how to prevent it at each layer: in memory, in the database and across multiple servers.</description>
+      <category>dotnet</category>
+      <category>concurrency</category>
+      <category>ef-core</category>
+      <category>reliability</category>
+    </item>
+    <item>
+      <title>How to Recover from Downstream Service Failure</title>
+      <link>blog/how-to-recover-from-downstream-service-failure.html</link>
+      <guid isPermaLink="false">blog/how-to-recover-from-downstream-service-failure.html</guid>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+      <description>How to keep your service healthy when a service it depends on is slow or down, using timeouts, retries, circuit breakers, fallbacks and queues.</description>
+      <category>dotnet</category>
+      <category>resilience</category>
+      <category>reliability</category>
+      <category>architecture</category>
+    </item>
+    <item>
+      <title>Level 1: C# Fundamentals</title>
+      <link>blog/level-1-csharp-fundamentals.html</link>
+      <guid isPermaLink="false">blog/level-1-csharp-fundamentals.html</guid>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+      <description>The base of everything in .NET. What to learn in C#, the habits that keep code correct from day one, and a practice plan to prove you are ready for Level 2.</description>
+      <category>dotnet</category>
+      <category>csharp</category>
+      <category>fundamentals</category>
+      <category>series</category>
+    </item>
+    <item>
+      <title>Level 2: Types and OOP Design</title>
+      <link>blog/level-2-types-and-oop-design.html</link>
+      <guid isPermaLink="false">blog/level-2-types-and-oop-design.html</guid>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+      <description>How to model a problem with clear types. Classes, structs and records, interfaces, composition over inheritance, and the SOLID principles used as guidelines.</description>
+      <category>dotnet</category>
+      <category>csharp</category>
+      <category>design</category>
+      <category>series</category>
+    </item>
+    <item>
+      <title>Level 3: Collections and LINQ</title>
+      <link>blog/level-3-collections-and-linq.html</link>
+      <guid isPermaLink="false">blog/level-3-collections-and-linq.html</guid>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Choosing the right collection by cost, writing LINQ that is correct and readable, and understanding deferred execution, the source of many subtle bugs.</description>
+      <category>dotnet</category>
+      <category>csharp</category>
+      <category>linq</category>
+      <category>collections</category>
+      <category>series</category>
+    </item>
+    <item>
+      <title>Level 4: Async and Concurrency</title>
+      <link>blog/level-4-async-and-concurrency.html</link>
+      <guid isPermaLink="false">blog/level-4-async-and-concurrency.html</guid>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+      <description>What async and await really do, how to avoid blocking and deadlocks, how to cancel and limit work, and how to share state between threads safely.</description>
+      <category>dotnet</category>
+      <category>csharp</category>
+      <category>async</category>
+      <category>concurrency</category>
+      <category>series</category>
+    </item>
+    <item>
+      <title>Level 5: ASP.NET Core and Data Access</title>
+      <link>blog/level-5-aspnet-core-and-data-access.html</link>
+      <guid isPermaLink="false">blog/level-5-aspnet-core-and-data-access.html</guid>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Building a web API that behaves under load. The request pipeline, dependency injection lifetimes, validation, authentication, and writing EF Core code you can trust.</description>
+      <category>dotnet</category>
+      <category>aspnet-core</category>
+      <category>ef-core</category>
+      <category>sql</category>
+      <category>series</category>
+    </item>
+    <item>
+      <title>Level 6: Performance and Runtime Internals</title>
+      <link>blog/level-6-performance-and-runtime-internals.html</link>
+      <guid isPermaLink="false">blog/level-6-performance-and-runtime-internals.html</guid>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+      <description>How the .NET runtime works, how to measure instead of guess, and how to reduce allocations and CPU cost where it matters, using BenchmarkDotNet and diagnostic tools.</description>
+      <category>dotnet</category>
+      <category>performance</category>
+      <category>gc</category>
+      <category>benchmarking</category>
+      <category>series</category>
+    </item>
+    <item>
+      <title>Level 7: Production Systems and Reliability</title>
+      <link>blog/level-7-production-systems-and-reliability.html</link>
+      <guid isPermaLink="false">blog/level-7-production-systems-and-reliability.html</guid>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Everything that happens after the code compiles. Observability, resilience, safe deployments, configuration, data changes on live systems, and handling incidents.</description>
+      <category>dotnet</category>
+      <category>reliability</category>
+      <category>observability</category>
+      <category>devops</category>
+      <category>series</category>
+    </item>
+    <item>
+      <title>A checklist for debugging production issues</title>
+      <link>blog/debugging-production-issues-checklist.html</link>
+      <guid isPermaLink="false">blog/debugging-production-issues-checklist.html</guid>
+      <pubDate>Wed, 28 Oct 2026 00:00:00 GMT</pubDate>
+      <description>A calm, repeatable order of questions to work through when something breaks in production.</description>
+      <category>debugging</category>
+      <category>craft</category>
+      <category>sample</category>
+    </item>
+  </channel>
+</rss>

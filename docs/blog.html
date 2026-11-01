@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blog · Giao Nguyen</title>
+<meta name="description" content="Practical notes on programming, software design and lessons from shipping real systems.">
+<meta name="theme-color" content="#030712">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Blog">
+<meta property="og:description" content="Practical notes on programming, software design and lessons from shipping real systems.">
+<link rel="alternate" type="application/rss+xml" title="Giao Nguyen" href="feed.xml">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23030712'/%3E%3Crect x='3' y='3' width='26' height='26' fill='none' stroke='%236366f1' stroke-width='2'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='14' font-weight='700' fill='%236366f1' text-anchor='middle'%3ENX%3C/text%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="index.html"><span class="avatar" aria-hidden="true">NG</span><span>Giao Nguyen</span></a>
+    <nav aria-label="Main">
+      <a href="blog.html" class="active" aria-current="page">Blog</a>
+      <a href="about.html">About</a>
+    </nav>
+    <button class="theme" type="button" id="theme" aria-label="Toggle color theme">
+      <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+<main>
+  <section class="hero-dark">
+    <div class="wrap">
+      <p class="eyebrow">Blog</p>
+      <h1>Notes on building software with .NET</h1>
+      <p class="lead">Practical notes on programming, software design and lessons from shipping real systems.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <h2>All posts</h2>
+      <div class="filters">
+      <label class="sr" for="q">Search posts</label>
+      <input id="q" type="search" placeholder="Search posts..." autocomplete="off">
+      <button type="button" class="chip" data-tag="" aria-pressed="true">All <span class="n">14</span></button>
+      <button type="button" class="chip" data-tag="dotnet" aria-pressed="false">dotnet <span class="n">12</span></button>
+      <button type="button" class="chip" data-tag="series" aria-pressed="false">series <span class="n">7</span></button>
+      <button type="button" class="chip" data-tag="csharp" aria-pressed="false">csharp <span class="n">6</span></button>
+      <button type="button" class="chip" data-tag="debugging" aria-pressed="false">debugging <span class="n">3</span></button>
+      <button type="button" class="chip" data-tag="performance" aria-pressed="false">performance <span class="n">3</span></button>
+      <button type="button" class="chip" data-tag="reliability" aria-pressed="false">reliability <span class="n">3</span></button>
+      <button type="button" class="chip" data-tag="concurrency" aria-pressed="false">concurrency <span class="n">2</span></button>
+      <button type="button" class="chip" data-tag="craft" aria-pressed="false">craft <span class="n">2</span></button>
+      <button type="button" class="chip" data-tag="ef-core" aria-pressed="false">ef-core <span class="n">2</span></button>
+      <button type="button" class="chip" data-tag="observability" aria-pressed="false">observability <span class="n">2</span></button>
+      <button type="button" class="chip" data-tag="sample" aria-pressed="false">sample <span class="n">2</span></button>
+      <button type="button" class="chip" data-tag="architecture" aria-pressed="false">architecture <span class="n">1</span></button>
+      <button type="button" class="chip" data-tag="aspnet-core" aria-pressed="false">aspnet-core <span class="n">1</span></button>
+      <button type="button" class="chip" data-tag="async" aria-pressed="false">async <span class="n">1</span></button>
+      <button type="button" class="chip" data-tag="benchmarking" aria-pressed="false">benchmarking <span class="n">1</span></button>
+      <button type="button" class="chip" data-tag="career" aria-pressed="false">career <span class="n">1</span></button>
+      <button type="button" class="chip" data-tag="collections" aria-pressed="false">collections <span class="n">1</span></button>
+      <button type="button" class="chip" data-tag="design" aria-pressed="false">design <span class="n">1</span></button>
+      <button type="button" class="chip" data-tag="devops" aria-pressed="false">devops <span class="n">1</span></button>
+      <button type="button" class="chip" data-tag="fundamentals" aria-pressed="false">fundamentals <span class="n">1</span></button>
+      <button type="button" class="chip" data-tag="gc" aria-pressed="false">gc <span class="n">1</span></button>
+      <button type="button" class="chip" data-tag="learning" aria-pressed="false">learning <span class="n">1</span></button>
+      <button type="button" class="chip" data-tag="linq" aria-pressed="false">linq <span class="n">1</span></button>
+      <button type="button" class="chip" data-tag="memory" aria-pressed="false">memory <span class="n">1</span></button>
+      <button type="button" class="chip" data-tag="resilience" aria-pressed="false">resilience <span class="n">1</span></button>
+      <button type="button" class="chip" data-tag="sql" aria-pressed="false">sql <span class="n">1</span></button>
+    </div>
+    <ul class="postlist" id="postlist">
+<li class="postrow" data-tags="dotnet csharp career learning" data-search="7 levels of .net mastery a map of seven skill levels for .net developers, from c# fundamentals to running reliable production systems, with what to learn at each step and how to tell you are ready for the next. dotnet csharp career learning">
+  <div class="meta"><time datetime="2026-11-01">01 Nov 2026</time><span>8 min read</span></div>
+  <h3><a href="blog/7-levels-of-dotnet-mastery.html">7 Levels of .NET Mastery</a></h3>
+  <p>A map of seven skill levels for .NET developers, from C# fundamentals to running reliable production systems, with what to learn at each step and how to tell you are ready for the next.</p>
+  <div class="chips"><a class="chip" href="blog.html#dotnet">dotnet</a><a class="chip" href="blog.html#csharp">csharp</a><a class="chip" href="blog.html#career">career</a><a class="chip" href="blog.html#learning">learning</a></div>
+</li>
+<li class="postrow" data-tags="csharp craft sample" data-search="habits that keep c# code readable five small habits that make c# code easier to read, review and change six months later. csharp craft sample">
+  <div class="meta"><time datetime="2026-11-01">01 Nov 2026</time><span>2 min read</span></div>
+  <h3><a href="blog/habits-that-keep-csharp-readable.html">Habits that keep C# code readable</a></h3>
+  <p>Five small habits that make C# code easier to read, review and change six months later.</p>
+  <div class="chips"><a class="chip" href="blog.html#csharp">csharp</a><a class="chip" href="blog.html#craft">craft</a><a class="chip" href="blog.html#sample">sample</a></div>
+</li>
+<li class="postrow" data-tags="dotnet debugging memory performance" data-search="how to diagnose a memory leak in .net a step-by-step method to confirm a memory leak, capture evidence with dotnet-counters and dotnet-gcdump, and trace the objects back to the root that keeps them alive. dotnet debugging memory performance">
+  <div class="meta"><time datetime="2026-11-01">01 Nov 2026</time><span>5 min read</span></div>
+  <h3><a href="blog/how-to-diagnose-a-memory-leak.html">How to Diagnose a Memory Leak in .NET</a></h3>
+  <p>A step-by-step method to confirm a memory leak, capture evidence with dotnet-counters and dotnet-gcdump, and trace the objects back to the root that keeps them alive.</p>
+  <div class="chips"><a class="chip" href="blog.html#dotnet">dotnet</a><a class="chip" href="blog.html#debugging">debugging</a><a class="chip" href="blog.html#memory">memory</a><a class="chip" href="blog.html#performance">performance</a></div>
+</li>
+<li class="postrow" data-tags="dotnet performance debugging observability" data-search="how to find the cause of a production performance issue a repeatable method for turning &quot;the site is slow&quot; into a specific cause, by narrowing down the layer first and using traces, counters and database tools second. dotnet performance debugging observability">
+  <div class="meta"><time datetime="2026-11-01">01 Nov 2026</time><span>8 min read</span></div>
+  <h3><a href="blog/how-to-find-the-cause-of-a-production-performance-issue.html">How to Find the Cause of a Production Performance Issue</a></h3>
+  <p>A repeatable method for turning &quot;the site is slow&quot; into a specific cause, by narrowing down the layer first and using traces, counters and database tools second.</p>
+  <div class="chips"><a class="chip" href="blog.html#dotnet">dotnet</a><a class="chip" href="blog.html#performance">performance</a><a class="chip" href="blog.html#debugging">debugging</a><a class="chip" href="blog.html#observability">observability</a></div>
+</li>
+<li class="postrow" data-tags="dotnet concurrency ef-core reliability" data-search="how to handle concurrent requests safely why two requests at the same time can corrupt your data, and how to prevent it at each layer: in memory, in the database and across multiple servers. dotnet concurrency ef-core reliability">
+  <div class="meta"><time datetime="2026-11-01">01 Nov 2026</time><span>6 min read</span></div>
+  <h3><a href="blog/how-to-handle-concurrent-requests-safely.html">How to Handle Concurrent Requests Safely</a></h3>
+  <p>Why two requests at the same time can corrupt your data, and how to prevent it at each layer: in memory, in the database and across multiple servers.</p>
+  <div class="chips"><a class="chip" href="blog.html#dotnet">dotnet</a><a class="chip" href="blog.html#concurrency">concurrency</a><a class="chip" href="blog.html#ef-core">ef-core</a><a class="chip" href="blog.html#reliability">reliability</a></div>
+</li>
+<li class="postrow" data-tags="dotnet resilience reliability architecture" data-search="how to recover from downstream service failure how to keep your service healthy when a service it depends on is slow or down, using timeouts, retries, circuit breakers, fallbacks and queues. dotnet resilience reliability architecture">
+  <div class="meta"><time datetime="2026-11-01">01 Nov 2026</time><span>7 min read</span></div>
+  <h3><a href="blog/how-to-recover-from-downstream-service-failure.html">How to Recover from Downstream Service Failure</a></h3>
+  <p>How to keep your service healthy when a service it depends on is slow or down, using timeouts, retries, circuit breakers, fallbacks and queues.</p>
+  <div class="chips"><a class="chip" href="blog.html#dotnet">dotnet</a><a class="chip" href="blog.html#resilience">resilience</a><a class="chip" href="blog.html#reliability">reliability</a><a class="chip" href="blog.html#architecture">architecture</a></div>
+</li>
+<li class="postrow" data-tags="dotnet csharp fundamentals series" data-search="level 1: c# fundamentals the base of everything in .net. what to learn in c#, the habits that keep code correct from day one, and a practice plan to prove you are ready for level 2. dotnet csharp fundamentals series">
+  <div class="meta"><time datetime="2026-11-01">01 Nov 2026</time><span>5 min read</span></div>
+  <h3><a href="blog/level-1-csharp-fundamentals.html">Level 1: C# Fundamentals</a></h3>
+  <p>The base of everything in .NET. What to learn in C#, the habits that keep code correct from day one, and a practice plan to prove you are ready for Level 2.</p>
+  <div class="chips"><a class="chip" href="blog.html#dotnet">dotnet</a><a class="chip" href="blog.html#csharp">csharp</a><a class="chip" href="blog.html#fundamentals">fundamentals</a><a class="chip" href="blog.html#series">series</a></div>
+</li>
+<li class="postrow" data-tags="dotnet csharp design series" data-search="level 2: types and oop design how to model a problem with clear types. classes, structs and records, interfaces, composition over inheritance, and the solid principles used as guidelines. dotnet csharp design series">
+  <div class="meta"><time datetime="2026-11-01">01 Nov 2026</time><span>5 min read</span></div>
+  <h3><a href="blog/level-2-types-and-oop-design.html">Level 2: Types and OOP Design</a></h3>
+  <p>How to model a problem with clear types. Classes, structs and records, interfaces, composition over inheritance, and the SOLID principles used as guidelines.</p>
+  <div class="chips"><a class="chip" href="blog.html#dotnet">dotnet</a><a class="chip" href="blog.html#csharp">csharp</a><a class="chip" href="blog.html#design">design</a><a class="chip" href="blog.html#series">series</a></div>
+</li>
+<li class="postrow" data-tags="dotnet csharp linq collections series" data-search="level 3: collections and linq choosing the right collection by cost, writing linq that is correct and readable, and understanding deferred execution, the source of many subtle bugs. dotnet csharp linq collections series">
+  <div class="meta"><time datetime="2026-11-01">01 Nov 2026</time><span>6 min read</span></div>
+  <h3><a href="blog/level-3-collections-and-linq.html">Level 3: Collections and LINQ</a></h3>
+  <p>Choosing the right collection by cost, writing LINQ that is correct and readable, and understanding deferred execution, the source of many subtle bugs.</p>
+  <div class="chips"><a class="chip" href="blog.html#dotnet">dotnet</a><a class="chip" href="blog.html#csharp">csharp</a><a class="chip" href="blog.html#linq">linq</a><a class="chip" href="blog.html#collections">collections</a><a class="chip" href="blog.html#series">series</a></div>
+</li>
+<li class="postrow" data-tags="dotnet csharp async concurrency series" data-search="level 4: async and concurrency what async and await really do, how to avoid blocking and deadlocks, how to cancel and limit work, and how to share state between threads safely. dotnet csharp async concurrency series">
+  <div class="meta"><time datetime="2026-11-01">01 Nov 2026</time><span>6 min read</span></div>
+  <h3><a href="blog/level-4-async-and-concurrency.html">Level 4: Async and Concurrency</a></h3>
+  <p>What async and await really do, how to avoid blocking and deadlocks, how to cancel and limit work, and how to share state between threads safely.</p>
+  <div class="chips"><a class="chip" href="blog.html#dotnet">dotnet</a><a class="chip" href="blog.html#csharp">csharp</a><a class="chip" href="blog.html#async">async</a><a class="chip" href="blog.html#concurrency">concurrency</a><a class="chip" href="blog.html#series">series</a></div>
+</li>
+<li class="postrow" data-tags="dotnet aspnet-core ef-core sql series" data-search="level 5: asp.net core and data access building a web api that behaves under load. the request pipeline, dependency injection lifetimes, validation, authentication, and writing ef core code you can trust. dotnet aspnet-core ef-core sql series">
+  <div class="meta"><time datetime="2026-11-01">01 Nov 2026</time><span>6 min read</span></div>
+  <h3><a href="blog/level-5-aspnet-core-and-data-access.html">Level 5: ASP.NET Core and Data Access</a></h3>
+  <p>Building a web API that behaves under load. The request pipeline, dependency injection lifetimes, validation, authentication, and writing EF Core code you can trust.</p>
+  <div class="chips"><a class="chip" href="blog.html#dotnet">dotnet</a><a class="chip" href="blog.html#aspnet-core">aspnet-core</a><a class="chip" href="blog.html#ef-core">ef-core</a><a class="chip" href="blog.html#sql">sql</a><a class="chip" href="blog.html#series">series</a></div>
+</li>
+<li class="postrow" data-tags="dotnet performance gc benchmarking series" data-search="level 6: performance and runtime internals how the .net runtime works, how to measure instead of guess, and how to reduce allocations and cpu cost where it matters, using benchmarkdotnet and diagnostic tools. dotnet performance gc benchmarking series">
+  <div class="meta"><time datetime="2026-11-01">01 Nov 2026</time><span>8 min read</span></div>
+  <h3><a href="blog/level-6-performance-and-runtime-internals.html">Level 6: Performance and Runtime Internals</a></h3>
+  <p>How the .NET runtime works, how to measure instead of guess, and how to reduce allocations and CPU cost where it matters, using BenchmarkDotNet and diagnostic tools.</p>
+  <div class="chips"><a class="chip" href="blog.html#dotnet">dotnet</a><a class="chip" href="blog.html#performance">performance</a><a class="chip" href="blog.html#gc">gc</a><a class="chip" href="blog.html#benchmarking">benchmarking</a><a class="chip" href="blog.html#series">series</a></div>
+</li>
+<li class="postrow" data-tags="dotnet reliability observability devops series" data-search="level 7: production systems and reliability everything that happens after the code compiles. observability, resilience, safe deployments, configuration, data changes on live systems, and handling incidents. dotnet reliability observability devops series">
+  <div class="meta"><time datetime="2026-11-01">01 Nov 2026</time><span>9 min read</span></div>
+  <h3><a href="blog/level-7-production-systems-and-reliability.html">Level 7: Production Systems and Reliability</a></h3>
+  <p>Everything that happens after the code compiles. Observability, resilience, safe deployments, configuration, data changes on live systems, and handling incidents.</p>
+  <div class="chips"><a class="chip" href="blog.html#dotnet">dotnet</a><a class="chip" href="blog.html#reliability">reliability</a><a class="chip" href="blog.html#observability">observability</a><a class="chip" href="blog.html#devops">devops</a><a class="chip" href="blog.html#series">series</a></div>
+</li>
+<li class="postrow" data-tags="debugging craft sample" data-search="a checklist for debugging production issues a calm, repeatable order of questions to work through when something breaks in production. debugging craft sample">
+  <div class="meta"><time datetime="2026-10-28">28 Oct 2026</time><span>2 min read</span></div>
+  <h3><a href="blog/debugging-production-issues-checklist.html">A checklist for debugging production issues</a></h3>
+  <p>A calm, repeatable order of questions to work through when something breaks in production.</p>
+  <div class="chips"><a class="chip" href="blog.html#debugging">debugging</a><a class="chip" href="blog.html#craft">craft</a><a class="chip" href="blog.html#sample">sample</a></div>
+</li>
+    </ul>
+    <p class="empty" id="empty" hidden>No posts match. Try another tag or search term.</p>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Giao Nguyen</span>
+    <span><a href="about.html#contact">giao5fs@gmail.com</a> &middot; <a href="feed.xml">RSS</a></span>
+  </div>
+</footer>
+<script src="assets/site.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+{{HEAD}}
+</head>
+<body>
+{{HEADER}}
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="avatar-lg" aria-hidden="true">{{INITIALS}}</div>
+      <p class="eyebrow">About me</p>
+      <h1>Hi, I'm Giao. I build software with C# and .NET.</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap prose">
+      <p>I'm a software engineer with more than ten years of experience developing .NET applications, from desktop tools that control factory machines to web systems running on AWS and Azure.</p>
+      <p>I started my career in industrial automation, which taught me to care about software that keeps running. Today I work across the stack: C# and SQL on the back end, and Angular, Vue or React on the front end.</p>
+      <p>I'm an AWS Certified Solutions Architect (Associate). I like learning new things, and I use this blog to write down what I learn so it is useful to other engineers too.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>What I work with</h2>
+      <div class="chips">
+        <span class="chip">C#</span><span class="chip">.NET</span><span class="chip">ASP.NET Core</span><span class="chip">SQL Server</span><span class="chip">PostgreSQL</span><span class="chip">Angular</span><span class="chip">Vue</span><span class="chip">React</span><span class="chip">TypeScript</span><span class="chip">AWS</span><span class="chip">Azure</span><span class="chip">Terraform</span><span class="chip">Docker</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="wrap">
+      <h2>Get in touch</h2>
+      <p class="prose" style="margin:0 0 20px">The best way to reach me is by email.</p>
+      <div class="mailbox">
+        <a class="mail" id="mail" href="mailto:{{EMAIL}}">{{EMAIL}}</a>
+        <button class="btn btn-primary" id="copy" type="button">Copy email</button>
+        <span class="copied" id="copied" role="status" aria-live="polite"></span>
+      </div>
+    </div>
+  </section>
+</main>
+{{FOOTER}}
+<script src="assets/site.js" defer></script>
+</body>
+</html>
